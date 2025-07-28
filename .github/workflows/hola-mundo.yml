@@ -7,8 +7,8 @@ on:
   #  branches: 
    #   - main
    # paths:
-   #   - 'BibliotecaAPI'
-    #  - 'BibliotecaAPITests'
+   #   - 'BibliotecaAPI/**'
+    #  - 'BibliotecaAPITests/**'
      # - '.github/workflows/hola-mundo.yml'
  # pull_request:
   #  branches:
