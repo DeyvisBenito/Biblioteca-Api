@@ -1,0 +1,40 @@
+name: Hola Mundo
+
+
+on: 
+  workflow_dispatch: # ejecucion manual
+  push: 
+    branches: 
+      - main
+    paths:
+     - 'BibliotecaAPI/**'
+     - 'BibliotecaAPITests/**'
+     - '.github/workflows/hola-mundo.yml'
+  pull_request:
+    branches:
+      - main
+
+env: 
+  VERSION_DOTNET: '9'
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    env:
+      proyecto: BibliotecaAPI/BibliotecaAPI.csproj
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+      - name: instalar .NET
+        uses: actions/setup-dotnet@v3.4.2
+        with:
+          dotnet-version: ${{ env.VERSION_DOTNET }}
+
+      - name: Obteniendo las dependencias
+        run: dotnet restore
+        
+      - name: compilar
+        run: dotnet build --no-restore
+
+      - name: Realizar Pruebas
+        run: dotnet test --no-build
