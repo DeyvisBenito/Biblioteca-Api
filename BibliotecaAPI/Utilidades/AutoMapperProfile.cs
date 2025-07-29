@@ -48,6 +48,9 @@ namespace BibliotecaAPI.Utilidades
 
             //Mapeo de usuarios
             CreateMap<Usuario, UsuarioDTO>();
+
+            // Mapeo de Llaves
+            CreateMap<LlaveApi, LlaveAPIDTO>();
         }
 
         private string NombreApellidoAutor(Autor autor) => $"{autor.Nombres} {autor.Apellidos}";

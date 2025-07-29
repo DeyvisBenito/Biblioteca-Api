@@ -23,6 +23,7 @@ namespace BibliotecaAPITests.Pruebas_Unitarias.Controllers.V1
         UserManager<Usuario> userManager = null!;
         private SignInManager<Usuario> signIngManager = null!;
         private UsuarioController controller = null!;
+        IServicioLlaveAPI servicioLlaveApi = null!;
 
         [TestInitialize]
         public void Setup()
@@ -51,8 +52,9 @@ namespace BibliotecaAPITests.Pruebas_Unitarias.Controllers.V1
 
             var servicioUsuarios = Substitute.For<IServicioUsuarios>();
             var mapper = ConstruirMapper();
+            servicioLlaveApi = Substitute.For<IServicioLlaveAPI>();
 
-            controller = new UsuarioController(userManager, configuration, signIngManager, servicioUsuarios, context, mapper);
+            controller = new UsuarioController(userManager, configuration, signIngManager, servicioUsuarios, context, mapper, servicioLlaveApi);
         }
 
         [TestMethod]

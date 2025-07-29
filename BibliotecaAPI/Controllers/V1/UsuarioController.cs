@@ -24,10 +24,11 @@ namespace BibliotecaAPI.Controllers.V1
         private readonly IServicioUsuarios servicioUsuarios;
         private readonly ApplicationDBContext context;
         private readonly IMapper mapper;
+        private readonly IServicioLlaveAPI servicioLlaveAPI;
 
         public UsuarioController(UserManager<Usuario> userManager, IConfiguration configuration, 
                 SignInManager<Usuario> signInManager, IServicioUsuarios servicioUsuarios, ApplicationDBContext context,
-                IMapper mapper)
+                IMapper mapper, IServicioLlaveAPI servicioLlaveAPI)
         {
             this.userManager = userManager;
             this.configuration = configuration;
@@ -35,6 +36,7 @@ namespace BibliotecaAPI.Controllers.V1
             this.servicioUsuarios = servicioUsuarios;
             this.context = context;
             this.mapper = mapper;
+            this.servicioLlaveAPI = servicioLlaveAPI;
         }
 
         [HttpGet(Name ="ObtenerUsuariosV1")]
@@ -60,7 +62,8 @@ namespace BibliotecaAPI.Controllers.V1
 
             if (resultado.Succeeded)
             {
-                var respuesta = await CrearToken(credencialesUsuario);
+                var respuesta = await CrearToken(credencialesUsuario, usuario.Id);
+                await servicioLlaveAPI.CrearLlaveAPI(usuario.Id, TipoLlave.Gratuita);
                 return respuesta;
             }
             else
@@ -115,7 +118,7 @@ namespace BibliotecaAPI.Controllers.V1
 
             if (resultado.Succeeded)
             {
-                var token = await CrearToken(credencialesUsuario);
+                var token = await CrearToken(credencialesUsuario, usuario.Id);
                 return token;
             }
             else
@@ -135,7 +138,7 @@ namespace BibliotecaAPI.Controllers.V1
             }
 
             var credencialesUsuario = new CredencialesUsuarioDTO() { Email = usuario.Email! };
-            var respuesta = await CrearToken(credencialesUsuario);
+            var respuesta = await CrearToken(credencialesUsuario, usuario.Id);
 
             return respuesta;
         }
@@ -157,11 +160,12 @@ namespace BibliotecaAPI.Controllers.V1
         }
 
         //Crear token
-        private async Task<RespuestaAutenticacionDTO> CrearToken(CredencialesUsuarioDTO credencialesUsuario)
+        private async Task<RespuestaAutenticacionDTO> CrearToken(CredencialesUsuarioDTO credencialesUsuario, string usuarioId)
         {
             var claims = new List<Claim>()
             {
-                new Claim("email", credencialesUsuario.Email)
+                new Claim("email", credencialesUsuario.Email),
+                new Claim("usuarioId", usuarioId)
             };
 
             var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);

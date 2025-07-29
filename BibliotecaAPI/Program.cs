@@ -95,6 +95,8 @@ builder.Services.AddAuthorization(opciones =>
 //Agregando servicio de usuarios
 builder.Services.AddScoped<IServicioUsuarios, ServicioUsuarios>();
 
+builder.Services.AddScoped<IServicioLlaveAPI, ServicioLlaveAPI>();
+
 
 builder.Services.AddTransient<IAlmacenarArchivos, AlmacenarArchivosLocal>();
 //Agregar una servicio en una version

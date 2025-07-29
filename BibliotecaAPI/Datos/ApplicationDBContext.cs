@@ -22,5 +22,7 @@ namespace BibliotecaAPI.Datos
         public DbSet<Comentario> Comentarios { get; set; }
         public DbSet<AutorLibro> AutorLibro { get; set; }
         public DbSet<Error> Errors { get; set; }
+        
+        public DbSet<LlaveApi> LlavesAPI { get; set; }
     }
 }

@@ -15,6 +15,20 @@ namespace BibliotecaAPI.Servicios
             this.contextAccessor = contextAccessor;
         }
 
+        public string? ObtenerUsuarioId()
+        {
+            var claimUsuarioId = contextAccessor.HttpContext!.User.Claims.Where(x => x.Type == "usuarioId").FirstOrDefault();
+
+            if(claimUsuarioId is null)
+            {
+                return null;
+            }
+
+            var usuarioId = claimUsuarioId.Value;
+
+            return usuarioId;
+        }
+
         public async Task<Usuario?> ObtenerUsuario()
         {
             var emailClaim = contextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type == "email");
